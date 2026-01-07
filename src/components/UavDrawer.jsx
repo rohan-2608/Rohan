@@ -1,61 +1,58 @@
 import { useState } from "react";
+import DroneList from "./DroneList";
+import TelemetryPopup from "./TelemetryPopup";
+import ConnectorLine from "./ConnectorLine";
 import "./UavDrawer.css";
 
-export default function UavDrawer({
-  uavs = [],
-  collapsed = false,
-  setCollapsed,
-  focusedUavId,
-  setFocusedUavId,
-}) {
-  const [confirmedId, setConfirmedId] = useState(null);
-
-  const triggerConfirm = (id) => {
-    setConfirmedId(id);
-    setTimeout(() => setConfirmedId(null), 600);
-  };
+export default function UavDrawer({ uavs, setFocusedUavId }) {
+  const [activeDrone, setActiveDrone] = useState(null);
+  const [anchorRect, setAnchorRect] = useState(null);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className={`uav-drawer ${collapsed ? "collapsed" : ""}`}>
-      {/* TOGGLE */}
+      
+      {/* HEADER (like casualty panel) */}
+      <div className="uav-drawer-header">
+  <span>UAVs</span>
+</div>
       <button
-        className="uav-drawer-toggle"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? "‹" : "›"}
-      </button>
+  className={`uav-collapse-handle ${collapsed ? "collapsed" : ""}`}
+  onClick={() => setCollapsed(!collapsed)}
+>
+  ▶
+</button>
 
-      {/* LIST */}
-      <div className="uav-list">
-        {uavs.map((uav) => (
-          <div
-            key={uav.id}
-            className={`uav-item
-              ${focusedUavId === uav.id ? "focused" : ""}
-              ${confirmedId === uav.id ? "confirmed" : ""}
-            `}
-            style={{ "--uavColor": uav.idColor }}
-            onMouseEnter={() => setFocusedUavId(uav.id)}
-            onMouseLeave={() => setFocusedUavId(null)}
-          >
-            {/* FULL ENERGY FILL */}
-            <span className="uav-energy-fill" />
 
-            {/* HEADER */}
-            <div className="uav-header">
-              <span className="uav-id">{uav.id}</span>
-              <span className="uav-dot" />
-            </div>
-
-            {/* CONTROLS */}
-            <div className="uav-controls">
-              <button onClick={() => triggerConfirm(uav.id)}>ARM</button>
-              <button onClick={() => triggerConfirm(uav.id)}>RTL</button>
-              <button onClick={() => triggerConfirm(uav.id)}>LAND</button>
-            </div>
-          </div>
-        ))}
+      {/* CONTENT */}
+      <div className="uav-drawer-content">
+        <DroneList
+          drones={uavs}
+          onHover={(drone) => setFocusedUavId(drone.id)}
+          onLeave={() => setFocusedUavId(null)}
+          onSelect={(drone, rect) => {
+            setActiveDrone(drone);
+            setAnchorRect(rect);
+            setFocusedUavId(drone.id);
+          }}
+        />
       </div>
+
+      {/* TELEMETRY */}
+      {activeDrone && (
+        <>
+          {anchorRect && <ConnectorLine anchor={anchorRect} />}
+          <TelemetryPopup
+            drone={activeDrone}
+            anchor={anchorRect}
+            onClose={() => {
+              setActiveDrone(null);
+              setAnchorRect(null);
+              setFocusedUavId(null);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

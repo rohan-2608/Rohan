@@ -114,14 +114,15 @@ export default function CasualtyMap({
       }
     });
 
-    if (!focusedId) {
-      map.flyTo({
-        center: [77.1175, 28.7488],
-        zoom: 16,
-        speed: 1.1,
-      });
-      return;
-    }
+   if (!focusedId && !focusedUavId) {
+  map.flyTo({
+    center: [77.1175, 28.7488],
+    zoom: 16,
+    speed: 1.1,
+  });
+  return;
+}
+
 
     const c = casualties.find((c) => c.id === focusedId);
     if (!c) return;
@@ -133,7 +134,31 @@ export default function CasualtyMap({
       curve: 1.3,
       essential: true,
     });
-  }, [focusedId, triageFilter, casualties, mapReady]);
+  }, [focusedId,focusedUavId, triageFilter, casualties, mapReady]);
+  /* =========================
+   UAV FOCUS (SPY / CINEMATIC)
+========================= */
+
+useEffect(() => {
+  console.log("🛩 focusedUavId in CasualtyMap:", focusedUavId);
+
+  if (!mapReady) return;
+  if (!focusedUavId) return;
+
+  const map = mapRefInstance.current;
+  if (!map) return;
+
+  const uav = uavs.find((u) => u.id === focusedUavId);
+  if (!uav) return;
+
+  map.flyTo({
+    center: [uav.lng, uav.lat],
+    zoom: 19.5,        // tighter than casualty
+    speed: 0.8,        // smoother = cinematic
+    curve: 1.4,
+    essential: true,
+  });
+}, [focusedUavId, uavs, mapReady]);
 
   /* =========================
      RENDER

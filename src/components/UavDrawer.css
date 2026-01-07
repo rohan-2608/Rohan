@@ -1,203 +1,218 @@
-/* =========================
-   UAV DRAWER ROOT
-========================= */
+body {
+  margin: 0;
+  background: #1e1e1e;
+  color: white;
+  font-family: sans-serif;
+}
 
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+.drone-list {
+  width: 220px;
+  padding: 20px;
+  background: #0b1530;
+}
+.drone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.drone-card {
+  background: #1c2541;
+  padding: 22px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  cursor: pointer;
+
+  min-height: 90px;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.drone-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+
+.telemetry-popup {
+  position: absolute;
+  background: #0b1530;
+  padding: 22px;
+  border-radius: 14px;
+  width: 260px;
+  z-index: 10;
+
+  animation: slidePop 0.35s ease-out;
+}
+
+@keyframes slidePop {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+.telemetry-popup {
+  margin-top: 60px; /* navbar clearance */
+}
+
+
+.connector {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+.status-slice {
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+.app {
+  width: 240px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.app.collapsed {
+  width: 40px;
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 18px;
+}
+.drone-card:hover {
+  box-shadow: 0 0 14px var(--idColor);
+  
+}
 .uav-drawer {
   position: absolute;
-  top: 0;
   left: 0;
-  height: 100%;
-  width: 280px;
+  top: 0;
+  height: 100vh;
+  width: 260px;
 
-  background:
-    linear-gradient(180deg, rgba(18,30,60,0.95), rgba(8,14,30,0.95));
-  backdrop-filter: blur(10px);
+  background: linear-gradient(
+    180deg,
+    #0b1530 0%,
+    #081026 100%
+  );
 
-  z-index: 6;
-  transition: width 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
 
-  box-shadow:
-    inset -1px 0 0 rgba(255,255,255,0.08),
-    12px 0 30px rgba(0,0,0,0.65);
+  transition: width 0.3s ease;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .uav-drawer.collapsed {
-  width: 48px;
+  width: 42px;
 }
 
-/* =========================
-   TOGGLE
-========================= */
+/* HEADER */
+.uav-drawer-header {
+  height: 56px;
+  padding: 0 14px;
 
-.uav-drawer-toggle {
-  position: absolute;
-  right: -28px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 28px;
-  height: 64px;
-
-  background: linear-gradient(180deg, #0e2455, #09162f);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.25);
-  cursor: pointer;
-
-  clip-path: polygon(0% 0%, 100% 10%, 100% 90%, 0% 100%);
-}
-
-/* =========================
-   LIST
-========================= */
-
-.uav-list {
-  padding: 72px 12px 12px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* =========================
-   UAV ITEM
-========================= */
-
-.uav-item {
-  position: relative;
-  overflow: hidden;
-
-  height: 42px;
-  background: rgba(0,0,0,0.35);
-  border: 1.5px solid var(--uavColor);
-  color: white;
-  font-family: "Orbitron", system-ui, sans-serif;
-
-  transition:
-    height 0.35s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-}
-
-.uav-item:hover {
-  height: 100px;
-  transform: translateX(4px);
-  box-shadow:
-    0 0 18px rgba(0,0,0,0.85),
-    0 0 16px var(--uavColor);
-}
-
-/* =========================
-   FULL ENERGY FILL
-========================= */
-
-.uav-energy-fill {
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent 0%,
-      var(--uavColor) 40%,
-      var(--uavColor) 60%,
-      transparent 100%
-    );
-
-  opacity: 0.9;
-  filter: saturate(1.6);
-
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-
-  z-index: 1;
-  pointer-events: none;
-}
-
-.uav-item:hover .uav-energy-fill {
-  transform: scaleX(1);
-}
-
-/* =========================
-   CONFIRMATION PULSE
-========================= */
-
-.uav-item.confirmed {
-  animation: uav-confirm 0.6s ease-out;
-}
-
-@keyframes uav-confirm {
-  0% {
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  }
-  30% {
-    box-shadow:
-      0 0 30px var(--uavColor),
-      inset 0 0 18px var(--uavColor);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  }
-}
-
-/* =========================
-   CONTENT ABOVE FILL
-========================= */
-
-.uav-header,
-.uav-controls {
-  position: relative;
-  z-index: 2;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.uav-header {
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
-}
 
-.uav-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--uavColor);
-}
-
-/* =========================
-   CONTROLS
-========================= */
-
-.uav-controls {
-  display: flex;
-  gap: 8px;
-  padding: 0 12px 12px;
-
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
-
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.uav-item:hover .uav-controls {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.uav-controls button {
-  flex: 1;
-  font-size: 11px;
-  padding: 6px 0;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.45);
   color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.uav-drawer-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
 }
 
-.uav-controls button:hover {
-  background: var(--uavColor);
-  color: #000;
+/* CONTENT */
+.uav-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+/* MATCH CASUALTY SCROLL */
+.uav-drawer-content::-webkit-scrollbar {
+  width: 6px;
+}
+.uav-drawer-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+.uav-collapse-handle {
+  position: absolute;
+  top: 50%;
+  right: -25px;              /* sticks outside the drawer */
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 48px;
+
+  background: #0b1530;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 8px 8px 0;
+
+  color: white;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
+}
+
+/* When collapsed, flip side */
+.uav-drawer.collapsed .uav-collapse-handle {
+  right: -14px;
+}
+.uav-collapse-handle {
+  transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+/* Rotate when expanded */
+.uav-collapse-handle {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Rotate back when collapsed */
+.uav-collapse-handle.collapsed {
+  transform: translateY(-50%) rotate(0deg);
+}
+.uav-collapse-handle:hover {
+  box-shadow: 0 0 12px rgba(74, 163, 255, 0.6);
+  border-color: rgba(74, 163, 255, 0.8);
+}
+.uav-drawer.collapsed .uav-collapse-handle {
+  opacity: 0.6;
+}
+
+.uav-drawer.collapsed .uav-collapse-handle:hover {
+  opacity: 1;
 }

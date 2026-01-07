@@ -7,7 +7,8 @@
     "battery": 82,
     "alt": 34,
     "speed": 12.4,
-    "idColor": "#4aa3ff"
+    "idColor": "#4aa3ff",
+    "status": "Flying"
   },
   {
     "id": "UAV-2",
@@ -17,6 +18,41 @@
     "battery": 61,
     "alt": 28,
     "speed": 9.1,
-    "idColor": "#ff9f4a"
+    "idColor": "#ff9f4a",
+    "status": "Hovering"
+  },
+  {
+    "id": "UAV-3",
+    "lat": 28.7494,
+    "lng": 77.1178,
+    "yaw": 90,
+    "battery": 74,
+    "alt": 31,
+    "speed": 10.2,
+    "idColor": "#6bcf63",
+    "status": "Idle"
+  },
+  {
+    "id": "UAV-4",
+    "lat": 28.7486,
+    "lng": 77.1166,
+    "yaw": 180,
+    "battery": 49,
+    "alt": 26,
+    "speed": 7.8,
+    "idColor": "#f7d046",
+    "status": "Returning"
+  },
+  {
+    "id": "UAV-5",
+    "lat": 28.7491,
+    "lng": 77.1186,
+    "yaw": 270,
+    "battery": 91,
+    "alt": 38,
+    "speed": 13.6,
+    "idColor": "#a66beb",
+    "status": "Error"
   }
 ]
+
